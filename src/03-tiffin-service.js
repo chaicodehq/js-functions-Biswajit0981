@@ -40,13 +40,73 @@
  *   // => { totalCustomers: 3, totalRevenue: 7200, mealBreakdown: { veg: 2, nonveg: 1 } }
  */
 export function createTiffinPlan({ name, mealType = "veg", days = 30 } = {}) {
-  // Your code here
+  if (typeof name !== "string" || name === "") return null;
+
+  let getBasePrice =
+    mealType === "veg"
+      ? 80
+      : mealType === "nonveg"
+        ? 120
+        : mealType === "jain"
+          ? 90
+          : null;
+
+  if (getBasePrice === null) return null;
+
+  return {
+    name,
+    mealType,
+    days,
+    dailyRate: getBasePrice,
+    totalCost: getBasePrice * days,
+  };
 }
 
 export function combinePlans(...plans) {
-  // Your code here
+  if (plans.length === 0) {
+    return null;
+  }
+
+  let vegCount = 0,
+    nonVegCount = 0,
+    jainCount = 0;
+  let totalSell = 0;
+  plans.forEach(({ mealType, totalCost }) => {
+    if (mealType === "veg") vegCount++;
+    else if (mealType === "nonveg") nonVegCount++;
+    else if (mealType === "jain") jainCount++;
+    totalSell += totalCost;
+  });
+
+  return {
+    totalCustomers: plans.length,
+    totalRevenue: totalSell,
+    mealBreakdown: { veg: vegCount, nonveg: nonVegCount, jain: jainCount },
+  };
 }
 
 export function applyAddons(plan, ...addons) {
-  // Your code here
+  if (!plan) return null;
+
+  const newPlan = { ...plan };
+
+  if (addons.length === 0) {
+    return {
+      ...newPlan,
+      addonNames: [],
+    };
+  }
+
+  const extraCost = addons.reduce((sum, addon) => {
+    return sum + (addon?.price || 0);
+  }, 0);
+
+  const newDailyRate = newPlan.dailyRate + extraCost;
+
+  return {
+    ...newPlan,
+    dailyRate: newDailyRate,
+    totalCost: newDailyRate * newPlan.days,
+    addonNames: addons.map((a) => a.name),
+  };
 }

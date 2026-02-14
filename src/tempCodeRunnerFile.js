@@ -45,55 +45,52 @@
  *   pricer("gold", true)  // => 200 * 1.5 * 1.3 = 390
  */
 export function createDialogueWriter(genre) {
-  const genres = { action: "action", romance: "romance", comedy: "comedy", drama: "drama" };
+  const genres = {
+    action: "action",
+    romance: "romance",
+    comedy: "comedy",
+    drama: "drama",
+  };
   if (!genres[genre]) return null;
 
   switch (genre) {
     case "action":
-      return (hero, villain) => !hero || !villain ? "..." : `${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'`;
+      return (hero, villain) =>
+        !hero || !villain
+          ? console.log("...")
+          : console.log(
+              `${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'`,
+            );
     case "romance":
-      return (hero, villain) => !hero || !villain ? "..." : `${hero} whispers: '${villain}, tum mere liye sab kuch ho'`;
+      return (hero, villain) =>
+        !hero || !villain
+          ? console.log("...")
+          : console.log(
+              `${hero} whispers: '${villain}, tum mere liye sab kuch ho'`,
+            );
     case "comedy":
-      return (hero, villain) => !hero || !villain ? "..." : `${hero} laughs: '${villain} bhai, kya kar rahe ho yaar!'`;
+      return (hero, villain) =>
+        !hero || !villain
+          ? console.log("...")
+          : console.log(
+              `${hero} laughs: '${villain} bhai, kya kar rahe ho yaar!'`,
+            );
     case "drama":
-      return (hero, villain) => !hero || !villain ? "..." : `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'`;
+      return (hero, villain) =>
+        !hero || !villain
+          ? console.log("...")
+          : console.log(
+              `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'`,
+            );
   }
 }
 
-
 export function createTicketPricer(basePrice) {
-  if (basePrice <= 0) return null;
-
-  return (seatType, isWeekend) => {
-    const store = {
-      gold: 1.5,
-      silver: 1,
-      platinum: 2,
-    };
-    if (!store[seatType]) return null;
-
-    return isWeekend
-      ? Math.round(basePrice * store[seatType] * 1.3)
-      : Math.round(basePrice * store[seatType]);
-  };
+  // Your code here
 }
 
 export function createRatingCalculator(weights) {
- if (typeof weights !== "object" || weights === null || Array.isArray(weights)) {
-    return null;
-  }
-
-  return (scores) => {
-    let total = 0;
-
-    for (let key in weights) {
-      if (scores[key] !== undefined) {
-        total += scores[key] * weights[key];
-      }
-    }
-
-    return Number(total.toFixed(1));
-  }
+  // Your code here
 }
 
-
+createDialogueWriter("drama")("roni", "biswajit");
