@@ -49,5 +49,95 @@
  *   // => { name: "Ram", area: "Dadar", total: 2, completed: 1, pending: 1, successRate: "50.00%" }
  */
 export function createDabbawala(name, area) {
-  // Your code here
+  let deliveryDataBase = [];
+  let deliveryId = 1;
+
+  if (!name || !area) return null;
+
+  const addDelivery = (from, to) => {
+    if (!from || !to) return -1;
+
+    let id = deliveryId;
+    let status = "pending";
+
+    const devliveryResponse = {
+      id,
+      status,
+      from,
+      to,
+    };
+
+    deliveryDataBase.push(devliveryResponse);
+    deliveryId++;
+
+    return id;
+  };
+
+  const completeDelivery = (id) => {
+    let result = false;
+    deliveryDataBase.forEach((devlivery) => {
+      if (devlivery.id === id && devlivery.status === "pending") {
+        const updatedDevlivery = { ...devlivery, status: "completed" };
+        deliveryDataBase.splice(updatedDevlivery.id - 1, 1, updatedDevlivery);
+        result = true;
+      }
+    });
+    return result;
+  };
+
+  const printDevlivery = () => {
+    console.log(deliveryDataBase);
+  };
+
+  const getActiveDeliveries = () => {
+    return deliveryDataBase.filter((item) => item.status === "pending");
+  };
+
+  const getStats = () => {
+    const total = deliveryDataBase.length;
+    let completed = 0,
+      pending = 0;
+    let successRate;
+    deliveryDataBase.forEach((item) => {
+      if (item.status === "pending") {
+        pending++;
+      } else {
+        completed++;
+      }
+    });
+
+    successRate = deliveryDataBase.length === 0 ? Number(0).toFixed(2): Number((completed / total) * 100).toFixed(2) ;
+console.log(successRate);
+    return { name, total, area, completed, pending, successRate: `${successRate}%` };
+  };
+
+  function reset () {console.log("c");
+    deliveryDataBase = [];
+    deliveryId = 1;
+    return true;
+  }
+
+  return {
+    addDelivery,
+    completeDelivery,
+    printDevlivery,
+    getActiveDeliveries,
+    getStats,
+    reset
+  };
 }
+
+const {
+  addDelivery,
+  completeDelivery,
+  printDevlivery,
+  getActiveDeliveries,
+  getStats,
+} = createDabbawala("RONI", "Kolkata");
+
+const ram = createDabbawala("Ram", "Dadar");
+ram.addDelivery("Andheri", "Churchgate");
+ram.addDelivery("Bandra", "CST"); 
+ram.completeDelivery(1); 
+ram.completeDelivery(2); 
+
