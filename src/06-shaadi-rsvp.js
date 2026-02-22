@@ -36,27 +36,67 @@
  *   The receiving function decides WHEN to call them.
  *
  * @example
- *   processGuests(
- *     [{ name: "Rahul", side: "bride" }, { name: "Priya", side: "groom" }],
- *     guest => guest.side === "bride"
- *   )
+    processGuests(
+      [{ name: "Rahul", side: "bride" }, { name: "Priya", side: "groom" }],
+      guest => guest.side === "bride"
+    )
  *   // => [{ name: "Rahul", side: "bride" }]
  *
  *   handleRSVP({ name: "Amit", rsvp: "yes" }, g => `${g.name} is coming!`, g => `${g.name} declined`)
  *   // => "Amit is coming!"
  */
 export function processGuests(guests, filterFn) {
-  // Your code here
+  if (
+    !guests ||
+    typeof guests !== "object" ||
+    typeof filterFn !== "function" ||
+    !filterFn
+  ) {
+    return [];
+  }
+
+  return guests.filter(filterFn);
 }
 
 export function notifyGuests(guests, notifyCallback) {
-  // Your code here
+  if (
+    !guests ||
+    typeof guests !== "object" ||
+    typeof notifyCallback !== "function" ||
+    !notifyCallback
+  ) {
+    return [];
+  }
+
+  return guests.map(notifyCallback);
 }
 
 export function handleRSVP(guest, onAccept, onDecline) {
-  // Your code here
+  if (
+    !guest ||
+    typeof guest !== "object" ||
+    typeof onAccept !== "function" ||
+    !onAccept ||
+    typeof onDecline !== "function"
+  ) {
+    return null;
+  }
+  
+  if (guest.rsvp === "yes"){ return onAccept(guest)}
+  else if (guest.rsvp === "no") {return onDecline(guest);}else {
+    return null;
+  }
 }
 
 export function transformGuestList(guests, ...transformFns) {
-  // Your code here
+  if (!Array.isArray(guests)) return [];
+
+  let result = guests;
+
+  // apply transforms left → right
+  for (let i = 0; i < transformFns.length; i++) {
+    result = transformFns[i](result);
+  }
+
+  return result;
 }
