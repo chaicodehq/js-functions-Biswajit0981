@@ -53,7 +53,7 @@
  *   generatePattern(3)        // => ["*", "**", "***", "**", "*"]
  */
 export function repeatChar(char, n) {
-  if (char.trim() === "" || typeof char !== "string" || n <= 0) {
+  if ( typeof char !== "string" || char.trim() === ""  || n <= 0) {
     return "";
   }
   return char + repeatChar(char, n - 1);
@@ -72,11 +72,17 @@ export function flattenArray(arr) {
 }
 
 export function isPalindrome(str) {
-  // Your code here
-}
+  if (typeof str !== "string") return false;
+  if (str.length === 1) return true;
+
+  return checkIsPalindrome(str.toLowerCase(), 0, str.length-1);
+} 
 
 export function generatePattern(n) {
-  // Your code here
+  let result = [];
+  if (!Number.isInteger(n)||n <= 0) return result;
+   patternHelper(1, n, result);
+   return result;
 }
 
 function sumOfNestedArrayHelper(arr, index, result) {
@@ -97,13 +103,42 @@ function MyflattenArray(arr, index, result) {
   if (!Array.isArray(arr) || arr.length === index) return;
 
   const curr = arr[index];
-  if (Number.isInteger(curr)) {
-    result.push(curr);
-  } else if (Array.isArray(curr)) {
+   
+  if (Array.isArray(curr)) {
     MyflattenArray(curr, 0, result);
+  }else {
+     result.push(curr);
   }
   MyflattenArray(arr, index + 1, result);
 }
 
 
-console.log(flattenArray([1,[2,[3,4]], 5]));
+function checkIsPalindrome(str, st, ed) {
+  // base case
+  if (st > ed) {
+    return true;
+  }
+
+  if (str.charAt(st) !== str.charAt(ed)) {
+    return false;
+  }
+
+  return checkIsPalindrome(str, st+1, ed-1);
+}
+
+
+
+function patternHelper (st, ed, result) {
+   if (st > ed) {
+    return;
+   }
+
+   result.push(repeatChar('*', st));
+  patternHelper(st+1, ed, result);
+  let str = repeatChar('*', st-1);
+  if (str.trim() !== "") {
+    result.push(str);
+  }
+}
+
+console.log(generatePattern(3));
