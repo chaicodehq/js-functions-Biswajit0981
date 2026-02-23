@@ -53,15 +53,22 @@
  *   generatePattern(3)        // => ["*", "**", "***", "**", "*"]
  */
 export function repeatChar(char, n) {
-  // Your code here
+  if (char.trim() === "" || typeof char !== "string" || n <= 0) {
+    return "";
+  }
+  return char + repeatChar(char, n - 1);
 }
 
 export function sumNestedArray(arr) {
-  // Your code here
+  if (!Array.isArray(arr) || arr.length === 0) return 0;
+
+  return sumOfNestedArrayHelper(arr.flat(Infinity), 0, 0);
 }
 
 export function flattenArray(arr) {
-  // Your code here
+  const result = [];
+  MyflattenArray(arr, 0, result);
+  return result;
 }
 
 export function isPalindrome(str) {
@@ -71,3 +78,32 @@ export function isPalindrome(str) {
 export function generatePattern(n) {
   // Your code here
 }
+
+function sumOfNestedArrayHelper(arr, index, result) {
+  // base
+  if (arr.length === index) {
+    return result;
+  }
+
+  if (Number.isInteger(arr[index])) {
+    result += arr[index];
+  }
+
+  return sumOfNestedArrayHelper(arr, index + 1, result);
+}
+
+function MyflattenArray(arr, index, result) {
+  // base conditions
+  if (!Array.isArray(arr) || arr.length === index) return;
+
+  const curr = arr[index];
+  if (Number.isInteger(curr)) {
+    result.push(curr);
+  } else if (Array.isArray(curr)) {
+    MyflattenArray(curr, 0, result);
+  }
+  MyflattenArray(arr, index + 1, result);
+}
+
+
+console.log(flattenArray([1,[2,[3,4]], 5]));
