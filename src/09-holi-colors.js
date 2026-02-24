@@ -54,7 +54,10 @@
  *   // red and blue objects are UNCHANGED
  */
 export function mixColors(color1, color2) {
-  // Your code here
+  //! base condition
+  if (!color1 || !color2 || !isValidColor(color1) || !isValidColor(color2)) return null;
+
+  return {...color1, name: `${color1.name}-${color2.name}`, r: calculateAvg(color1.r, color2.r), g: calculateAvg(color1.g, color2.g), b:calculateAvg(color1.b, color2.b)}
 }
 
 export function adjustBrightness(color, factor) {
@@ -72,3 +75,14 @@ export function removeFromPalette(palette, colorName) {
 export function mergePalettes(palette1, palette2) {
   // Your code here
 }
+
+function isValidColor(obj) {
+  
+  return Object.hasOwn(obj, "name") && Object.hasOwn(obj, "r") && Object.hasOwn(obj, "g") && Object.hasOwn(obj, "b");
+}
+
+function calculateAvg(a, b) {
+   return Number(Math.round(Math.abs(a - b)/ 2));
+}
+
+console.log(mixColors({ name: "red", r: 255, g: 0, b: 0 }, { name: "blue", r: 0, g: 0, b: 255 }));

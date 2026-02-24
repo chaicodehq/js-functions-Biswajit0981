@@ -1,1 +1,1 @@
-if (item.status === "pending") {return item}
+Number(Math.abs(a - b)/ 2) * 100
