@@ -84,7 +84,6 @@ export function createMapper(fields) {
     let newOBj = {};
     fields.forEach((key) => {
       if (obj[key]) {
-
         newOBj[key] = obj[key];
       }
     });
