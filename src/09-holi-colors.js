@@ -54,35 +54,71 @@
  *   // red and blue objects are UNCHANGED
  */
 export function mixColors(color1, color2) {
-  //! base condition
-  if (!color1 || !color2 || !isValidColor(color1) || !isValidColor(color2)) return null;
+  if (!color1 || !color2 || color1 === null || color2 === null) return null;
 
-  return {...color1, name: `${color1.name}-${color2.name}`, r: calculateAvg(color1.r, color2.r), g: calculateAvg(color1.g, color2.g), b:calculateAvg(color1.b, color2.b)}
+  if (!isValidColor(color1) || !isValidColor(color2)) return null;
+
+  return {
+    name: `${color1.name}-${color2.name}`,
+    r: Math.round((color1.r + color2.r) / 2),
+    g: Math.round((color1.g + color2.g) / 2),
+    b: Math.round((color1.b + color2.b) / 2),
+  };
 }
 
 export function adjustBrightness(color, factor) {
-  // Your code here
+  if (color === null || typeof factor !== "number") return null;
+
+  if (!isValidColor(color) || typeof factor !== "number") return null;
+
+  const clamp = (v) => Math.max(0, Math.min(255, Math.round(v)));
+
+  return {
+    ...color,
+    r: clamp(color.r * factor),
+    g: clamp(color.g * factor),
+    b: clamp(color.b * factor),
+  };
 }
 
 export function addToPalette(palette, color) {
-  // Your code here
+  if (color === null) return [...palette];
+
+  if (!Array.isArray(palette)) return isValidColor(color) ? [color] : [];
+
+  if (!isValidColor(color)) return [...palette];
+
+  return [...palette, color];
 }
 
 export function removeFromPalette(palette, colorName) {
-  // Your code here
+  if (!Array.isArray(palette)) return [];
+
+  return palette.filter((c) => c.name !== colorName);
 }
 
 export function mergePalettes(palette1, palette2) {
-  // Your code here
+  const p1 = Array.isArray(palette1) ? palette1 : [];
+  const p2 = Array.isArray(palette2) ? palette2 : [];
+
+  const seen = new Set();
+  const result = [];
+
+  for (const color of [...p1, ...p2]) {
+    if (!seen.has(color.name)) {
+      seen.add(color.name);
+      result.push(color);
+    }
+  }
+
+  return result;
 }
 
 function isValidColor(obj) {
-  
-  return Object.hasOwn(obj, "name") && Object.hasOwn(obj, "r") && Object.hasOwn(obj, "g") && Object.hasOwn(obj, "b");
+  return (
+    Object.hasOwn(obj, "name") &&
+    Object.hasOwn(obj, "r") &&
+    Object.hasOwn(obj, "g") &&
+    Object.hasOwn(obj, "b")
+  );
 }
-
-function calculateAvg(a, b) {
-   return Number(Math.round(Math.abs(a - b)/ 2));
-}
-
-console.log(mixColors({ name: "red", r: 255, g: 0, b: 0 }, { name: "blue", r: 0, g: 0, b: 255 }));

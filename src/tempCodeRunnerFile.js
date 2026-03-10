@@ -1,1 +1,1 @@
-Number(Math.abs(a - b)/ 2) * 100
+ // const isVoterRegistered = registeredVoters.filter(voter => voter.id === id);
